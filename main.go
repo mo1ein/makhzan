@@ -1,13 +1,15 @@
 package main
 
 import (
-	"github/mo1ein/makhzan/makhzan"
+	"fmt"
+	"makhzan/makhzan"
 )
 
 func main() {
-	client := makhzan.ghAuth()
+    fmt.Println("OK")
+	client, ctx := makhzan.GhAuth()
 	// not forked repos
-	allRepos := makhzan.reposList(client)
-	allLangs := makhzan.langList(client, allRepos)
-	makhzan.PieChart(allLangs, "Ratio of languages in github repo")
+    allRepos := makhzan.ReposList(client, ctx)
+    allLangs := makhzan.LangList(client, ctx, allRepos, "mo1ein")
+    makhzan.PieChart(allLangs, "Ratio of languages in github repo")
 }

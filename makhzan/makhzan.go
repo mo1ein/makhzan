@@ -63,26 +63,26 @@ func PieChart(d map[string]int, t string) {
 	// return pie
 }
 
-func ghAuth() *github.Client {
+func GhAuth() (*github.Client, context.Context) {
 	ctx := context.Background()
 	//TODO: input gh token
-	var string ghToken
-	fmt.Scanf("%s", &ghToken)
+	var ghToken string
+	fmt.Scanf("%v", &ghToken)
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: ghToken},
 	)
 	tc := oauth2.NewClient(ctx, ts)
 
 	client := github.NewClient(tc)
-	var string username
+	var username string
 	fmt.Scanf("%s", &username)
 
 	//TODO: this for use other funcs
 	// list all repositories for the authenticated user
-	return client
+	return client, ctx
 }
 
-func reposList(c *github.Client) []string {
+func ReposList(c *github.Client, ctx context.Context) []string {
 	// not forked
 	// add contribute langs...
 	// todo: add private repos
@@ -91,16 +91,16 @@ func reposList(c *github.Client) []string {
 	for i, r := range repos {
 		if !*r.Fork {
 			repoList[i] = *r.Name
-			fmt.Println(*r.Name)
+			// fmt.Println(*r.Name)
 		}
 	}
 	return repoList
 }
 
-func langList(c *github.Client, r []string) map[string]int {
+func LangList(c *github.Client, ctx context.Context, r []string, u string) map[string]int {
 	langsMap := make(map[string]int, len(r))
 	for _, name := range r {
-		langs, _, _ := c.Repositories.ListLanguages(ctx, username, name)
+		langs, _, _ := c.Repositories.ListLanguages(ctx, u, name)
 		for k, v := range langs {
 			langsMap[k] += v
 		}
