@@ -10,7 +10,6 @@ import (
 	"os"
 )
 
-// *charts.Pie
 func PieChart(d map[string]int, t string) {
 	destinations := make([]opts.PieData, len(d))
 	i := 0
@@ -25,6 +24,8 @@ func PieChart(d map[string]int, t string) {
 		i++
 	}
 	pie := charts.NewPie()
+
+    // pie chart configs
 	pie.SetGlobalOptions(charts.WithTitleOpts(opts.Title{
 		Title: t,
 		TitleStyle: &opts.TextStyle{
@@ -33,23 +34,16 @@ func PieChart(d map[string]int, t string) {
 		Left: "center",
 	}),
 	)
-
 	pie.SetGlobalOptions(charts.WithTooltipOpts(opts.Tooltip{
 		Show: true,
-		// item or axis?
 		Trigger: "item",
-		// mousemove or click or both
 		TriggerOn: "mousemove",
 	}))
-
 	pie.SetGlobalOptions(charts.WithLegendOpts(opts.Legend{
 		Show:   true,
 		Orient: "horizontal",
 		Top:    "bottom",
 	}))
-
-	// TODO: add Toolbox for save image
-	//TODO: change these like smooth add series
 	pie.AddSeries("Languages", destinations)
 	pie.SetSeriesOptions(charts.WithLabelOpts(
 		opts.Label{
@@ -57,15 +51,12 @@ func PieChart(d map[string]int, t string) {
 			Formatter: "{b}: {d}%",
 		}),
 	)
-
 	f, _ := os.Create("pie.html")
 	pie.Render(f)
-	// return pie
 }
 
 func GhAuth() (*github.Client, context.Context) {
 	ctx := context.Background()
-	//TODO: input gh token
 	var ghToken string
 	fmt.Scanf("%v", &ghToken)
 	ts := oauth2.StaticTokenSource(
@@ -77,33 +68,32 @@ func GhAuth() (*github.Client, context.Context) {
 	var username string
 	fmt.Scanf("%s", &username)
 
-	//TODO: this for use other funcs
-	// list all repositories for the authenticated user
 	return client, ctx
 }
 
+// TODO: add contrubuted langs
+// TODO: add private repos
+
+// Return string slice of Repos(Not forked repos)
 func ReposList(c *github.Client, ctx context.Context) []string {
-	// not forked
-	// add contribute langs...
-	// todo: add private repos
 	repos, _, _ := c.Repositories.List(ctx, "", nil)
 	repoList := make([]string, len(repos))
 	for i, r := range repos {
 		if !*r.Fork {
 			repoList[i] = *r.Name
-			// fmt.Println(*r.Name)
 		}
 	}
 	return repoList
 }
 
-func LangList(c *github.Client, ctx context.Context, r []string, u string) map[string]int {
-	langsMap := make(map[string]int, len(r))
-	for _, name := range r {
+// Return map of languages `string` as key and `int` as value
+func LangList(c *github.Client, ctx context.Context, repos []string, u string) map[string]int {
+	langMap := make(map[string]int, len(r))
+	for _, name := range repos {
 		langs, _, _ := c.Repositories.ListLanguages(ctx, u, name)
 		for k, v := range langs {
-			langsMap[k] += v
+			langMap[k] += v
 		}
 	}
-	return langsMap
+	return langMap
 }
