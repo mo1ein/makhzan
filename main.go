@@ -1,15 +1,9 @@
 package main
 
 import (
-	"fmt"
-	"makhzan/makhzan"
+    "github.com/mo1ein/cmd"
 )
 
-func main() {
-	fmt.Println("OK")
-	client, ctx := makhzan.GhAuth()
-	// not forked repos
-	allRepos := makhzan.ReposList(client, ctx)
-	allLangs := makhzan.LangList(client, ctx, allRepos, "mo1ein")
-	makhzan.PieChart(allLangs, "Ratio of languages in github repo")
+func Execute() {
+    cmd.Execute()
 }
