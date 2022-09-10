@@ -14,7 +14,9 @@ func Execute() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(allRepos)
-	allLangs := makhzan.LangList(client, ctx, allRepos, "mo1ein")
+	var username string
+	fmt.Print("Enter repo username: ")
+	fmt.Scan("%s", &username)
+	allLangs := makhzan.LangList(client, ctx, allRepos, username)
 	makhzan.PieChart(allLangs, "Ratio of languages in github repo")
 }
