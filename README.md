@@ -3,7 +3,7 @@
 makhzan is a github repo analyzer
 
 <center>
-<img src="https://github.com/mo1ein/makhzan/blob/master/images/langPieChart.png"/>
+<img src="https://github.com/mo1ein/makhzan/blob/master/images/langPieChart.png" width="700" height="500"/>
 </center>
 
 ## installation
