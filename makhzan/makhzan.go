@@ -54,7 +54,7 @@ func PieChart(d map[string]int, t string) {
 			Formatter: "{b}: {d}%",
 		}),
 	)
-	f, _ := os.Create("pie.html")
+	f, _ := os.Create("langPieChart.html")
 	pie.Render(f)
 }
 
