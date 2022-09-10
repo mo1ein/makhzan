@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/mo1ein/cmd"
+	"github.com/mo1ein/makhzan/cmd"
 )
 
-func Execute() {
+func main() {
 	cmd.Execute()
 }

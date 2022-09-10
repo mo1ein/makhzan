@@ -6,11 +6,11 @@ import (
 	"github.com/go-echarts/go-echarts/v2/charts"
 	"github.com/go-echarts/go-echarts/v2/opts"
 	"github.com/google/go-github/v47/github"
+	"golang.org/x/crypto/ssh/terminal"
 	"golang.org/x/oauth2"
-    "golang.org/x/crypto/ssh/terminal"
+	"log"
 	"os"
-    "log"
-    "syscall"
+	"syscall"
 )
 
 func PieChart(d map[string]int, t string) {
@@ -65,14 +65,14 @@ func GhAuth() (*github.Client, context.Context) {
 	token := string(byteToken)
 
 	ctx := context.Background()
-    ts := oauth2.StaticTokenSource(
-        &oauth2.Token{AccessToken: token},
-    )
-    tc := oauth2.NewClient(ctx, ts)
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: token},
+	)
+	tc := oauth2.NewClient(ctx, ts)
 
-    client := github.NewClient(tc)
+	client := github.NewClient(tc)
 
-    return client, ctx
+	return client, ctx
 }
 
 // TODO: add contrubuted langs
@@ -82,9 +82,9 @@ func GhAuth() (*github.Client, context.Context) {
 func RepoList(c *github.Client, ctx context.Context) ([]string, error) {
 	repos, resp, err := c.Repositories.List(ctx, "", nil)
 	projects := make([]string, len(repos))
-    if err != nil {
-        return projects, err
-    }
+	if err != nil {
+		return projects, err
+	}
 
 	// Rate.Limit should most likely be 5000 when authorized.
 	log.Printf("Rate: %#v\n", resp.Rate)
@@ -106,7 +106,7 @@ func RepoList(c *github.Client, ctx context.Context) ([]string, error) {
 func LangList(c *github.Client, ctx context.Context, repos []string, u string) map[string]int {
 	langMap := make(map[string]int, len(repos))
 	for _, name := range repos {
-        // this is not beautiful
+		// this is not beautiful
 		langs, _, _ := c.Repositories.ListLanguages(ctx, u, name)
 		for k, v := range langs {
 			langMap[k] += v
