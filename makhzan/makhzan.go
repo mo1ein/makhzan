@@ -75,15 +75,15 @@ func GhAuth() (*github.Client, context.Context) {
 // TODO: add private repos
 
 // Return string slice of Repos(Not forked repos)
-func ReposList(c *github.Client, ctx context.Context) []string {
+func RepoList(c *github.Client, ctx context.Context) []string {
 	repos, _, _ := c.Repositories.List(ctx, "", nil)
-	repoList := make([]string, len(repos))
+	projects := make([]string, len(repos))
 	for i, r := range repos {
 		if !*r.Fork {
-			repoList[i] = *r.Name
+			projects[i] = *r.Name
 		}
 	}
-	return repoList
+	return projects
 }
 
 // Return map of languages `string` as key and `int` as value
