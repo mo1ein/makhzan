@@ -7,7 +7,10 @@ import (
 	"github.com/go-echarts/go-echarts/v2/opts"
 	"github.com/google/go-github/v47/github"
 	"golang.org/x/oauth2"
+    "golang.org/x/crypto/ssh/terminal"
 	"os"
+    "log"
+    "syscall"
 )
 
 func PieChart(d map[string]int, t string) {
@@ -56,40 +59,54 @@ func PieChart(d map[string]int, t string) {
 }
 
 func GhAuth() (*github.Client, context.Context) {
+	fmt.Print("Enter GitHub Token: ")
+	byteToken, _ := terminal.ReadPassword(int(syscall.Stdin))
+	println()
+	token := string(byteToken)
+
 	ctx := context.Background()
-	var ghToken string
-	fmt.Scanf("%v", &ghToken)
-	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: ghToken},
-	)
-	tc := oauth2.NewClient(ctx, ts)
+    ts := oauth2.StaticTokenSource(
+        &oauth2.Token{AccessToken: token},
+    )
+    tc := oauth2.NewClient(ctx, ts)
 
-	client := github.NewClient(tc)
-	var username string
-	fmt.Scanf("%s", &username)
+    client := github.NewClient(tc)
 
-	return client, ctx
+    return client, ctx
 }
 
 // TODO: add contrubuted langs
 // TODO: add private repos
 
 // Return string slice of Repos(Not forked repos)
-func RepoList(c *github.Client, ctx context.Context) []string {
-	repos, _, _ := c.Repositories.List(ctx, "", nil)
+func RepoList(c *github.Client, ctx context.Context) ([]string, error) {
+	repos, resp, err := c.Repositories.List(ctx, "", nil)
 	projects := make([]string, len(repos))
+    if err != nil {
+        return projects, err
+    }
+
+	// Rate.Limit should most likely be 5000 when authorized.
+	log.Printf("Rate: %#v\n", resp.Rate)
+
+	// If a Token Expiration has been set, it will be displayed.
+	if !resp.TokenExpiration.IsZero() {
+		log.Printf("Token Expiration: %v\n", resp.TokenExpiration)
+	}
+
 	for i, r := range repos {
 		if !*r.Fork {
 			projects[i] = *r.Name
 		}
 	}
-	return projects
+	return projects, nil
 }
 
 // Return map of languages `string` as key and `int` as value
 func LangList(c *github.Client, ctx context.Context, repos []string, u string) map[string]int {
-	langMap := make(map[string]int, len(r))
+	langMap := make(map[string]int, len(repos))
 	for _, name := range repos {
+        // this is not beautiful
 		langs, _, _ := c.Repositories.ListLanguages(ctx, u, name)
 		for k, v := range langs {
 			langMap[k] += v
