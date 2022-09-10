@@ -6,7 +6,7 @@ import (
 )
 
 func Execute() {
-	fmt.Println("OK")
+    fmt.Println("Welcome to makhzan :)\n")
 	client, ctx := makhzan.GhAuth()
 	// not forked repos
 	allRepos := makhzan.ReposList(client, ctx)
