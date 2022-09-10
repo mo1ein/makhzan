@@ -25,7 +25,7 @@ func PieChart(d map[string]int, t string) {
 	}
 	pie := charts.NewPie()
 
-    // pie chart configs
+	// pie chart configs
 	pie.SetGlobalOptions(charts.WithTitleOpts(opts.Title{
 		Title: t,
 		TitleStyle: &opts.TextStyle{
@@ -35,8 +35,8 @@ func PieChart(d map[string]int, t string) {
 	}),
 	)
 	pie.SetGlobalOptions(charts.WithTooltipOpts(opts.Tooltip{
-		Show: true,
-		Trigger: "item",
+		Show:      true,
+		Trigger:   "item",
 		TriggerOn: "mousemove",
 	}))
 	pie.SetGlobalOptions(charts.WithLegendOpts(opts.Legend{

@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"fmt"
-    "github.com/mo1ein/makhzan"
+	"github.com/mo1ein/makhzan"
 )
 
 func Execute() {
-    fmt.Println("Welcome to makhzan :)\n")
+	fmt.Println("Welcome to makhzan :)\n")
 	client, ctx := makhzan.GhAuth()
 	// not forked repos
 	allRepos := makhzan.ReposList(client, ctx)
