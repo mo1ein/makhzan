@@ -2,9 +2,6 @@
 
 makhzan is a github repo analyzer
 
-<center>
-<img src="https://github.com/mo1ein/makhzan/blob/master/images/langPieChart.png" width="700" height="500"/>
-</center>
 
 ## installation
 
@@ -22,3 +19,7 @@ And open generated file:
 ```
 xdg-open langPieChart.html
 ```
+<p align = "center"><img src="./images/langPieChart.png" width="700" height="500"/></p>
+
+## Contribute
+Just send PR! That's very enjoyable for me if you contribute. :-) 
