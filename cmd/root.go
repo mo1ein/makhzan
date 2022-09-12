@@ -10,7 +10,7 @@ func Execute() {
 	client, ctx := makhzan.GhAuth()
 
 	// not forked repos
-	allRepos, err := makhzan.RepoList(client, ctx)
+	allRepos, err := makhzan.RepoList(client, ctx, "")
 	if err != nil {
 		fmt.Println(err)
 	}
