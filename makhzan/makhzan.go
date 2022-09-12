@@ -79,8 +79,8 @@ func GhAuth() (*github.Client, context.Context) {
 // TODO: add private repos
 
 // Return string slice of Repos(Not forked repos)
-func RepoList(c *github.Client, ctx context.Context) ([]string, error) {
-	repos, resp, err := c.Repositories.List(ctx, "", nil)
+func RepoList(c *github.Client, ctx context.Context, username string) ([]string, error) {
+	repos, resp, err := c.Repositories.List(ctx, username, nil)
 	projects := make([]string, len(repos))
 	if err != nil {
 		return projects, err
