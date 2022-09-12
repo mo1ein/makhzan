@@ -36,7 +36,7 @@ func TestRepoList(t *testing.T) {
 }
 
 func removeEmptyString(s []string, r string) []string {
-	res := make([]string, 0)
+	var res []string
 	for _, v := range s {
 		if v != r {
 			res = append(res, v)
